@@ -126,7 +126,7 @@ const serialize = async (postModel, options = {isBrowserPreview: false}) => {
 
     const timezone = settingsCache.get('timezone');
     const momentDate = post.published_at ? moment(post.published_at) : moment();
-    post.published_at = momentDate.tz(timezone).format('DD MMM YYYY');
+    post.published_at = momentDate.tz(timezone).format('YYYY/M/D');
 
     post.authors = post.authors && post.authors.map(author => author.name).join(',');
     if (post.posts_meta) {
