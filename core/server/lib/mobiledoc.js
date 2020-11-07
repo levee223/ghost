@@ -27,7 +27,7 @@ module.exports = {
     get cards() {
         if (!cards) {
             const CardFactory = require('@tryghost/kg-card-factory');
-            const defaultCards = require('@tryghost/kg-default-cards');
+            const defaultCards = require('@tryghost/kg-default-cards'); defaultCards.push(require('./mobiledoc-kg-default-cards-video'));
 
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
@@ -36,7 +36,7 @@ module.exports = {
                     const {ext} = path.parse(storagePath);
 
                     return imageTransform.canTransformFiles()
-                        && imageTransform.canTransformFileExtension(ext)
+                        && imageTransform.canTransformFileExtension(ext) && !['.mp4', '.m4v', '.m4p'].includes(ext)
                         && typeof storage.getStorage().saveRaw === 'function';
                 }
             });

@@ -7,7 +7,7 @@ module.exports = function normalize(req, res, next) {
     const imageOptimizationOptions = config.get('imageOptimization');
 
     // CASE: image transform is not capable of transforming file (e.g. .gif)
-    if (!imageTransform.canTransformFileExtension(req.file.ext) || !imageOptimizationOptions.resize) {
+    if (!imageTransform.canTransformFileExtension(req.file.ext) || !imageOptimizationOptions.resize || ['.mp4', '.m4v', '.m4p'].includes(req.file.ext)) {
         return next();
     }
 

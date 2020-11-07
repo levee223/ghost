@@ -31,7 +31,7 @@ module.exports = function (req, res, next) {
     }
 
     // CASE: image transform is not capable of transforming file (e.g. .gif)
-    if (!imageTransform.canTransformFileExtension(requestUrlFileExtension)) {
+    if (!imageTransform.canTransformFileExtension(requestUrlFileExtension) || ['.mp4', '.m4v', '.m4p'].includes(requestUrlFileExtension)) {
         return redirectToOriginal();
     }
 
