@@ -21,6 +21,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Release $LATEST_TAG"
-          git tag $LATEST_TAG
           git push
-          git push origin $LATEST_TAG
