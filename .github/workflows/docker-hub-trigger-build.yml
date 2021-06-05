@@ -1,0 +1,21 @@
+name: Docker Hub trigger build
+
+on:
+  push:
+    branches:
+      - main
+      - 3.x
+
+jobs:
+  ignition:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        env:
+          DOCKER_HUB_TRIGGER_URL: ${{ secrets.DOCKER_HUB_TRIGGER_URL }}
+        run: |
+          DOCKER_TAG=latest
+          if [ "${GITHUB_REF##*/}" = "3.x" ]; then
+              DOCKER_TAG=3.x
+          fi
+          curl -XPOST -H 'Content-Type: application/json' -d "{\"docker_tag\": \"${DOCKER_TAG}\"}" "$DOCKER_HUB_TRIGGER_URL"

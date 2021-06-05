@@ -1,4 +1,6 @@
 routes:
+  /authors/: authors
+  /tags/: tags
 
 collections:
   /:
