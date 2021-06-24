@@ -5,7 +5,12 @@ const errors = require('@tryghost/errors');
  * @param {Bookshelf} Bookshelf
  */
 module.exports = function (Bookshelf) {
-    Bookshelf.Model = Bookshelf.Model.extend({}, {
+    Bookshelf.Model = Bookshelf.Model.extend({
+        // When loading an instance, subclasses can specify default to fetch
+        defaultColumnsToFetch: function defaultColumnsToFetch() {
+            return [];
+        }
+    }, {
         /**
          * ### Find All
          * Fetches all the data for a particular model
@@ -198,7 +203,7 @@ module.exports = function (Bookshelf) {
          * @param {Object} [unfilteredOptions]
          * @return {Promise<Bookshelf['Model']>} Empty Model
          */
-        destroy: async function destroy(unfilteredOptions) {
+        destroy: function destroy(unfilteredOptions) {
             const options = this.filterOptions(unfilteredOptions, 'destroy');
 
             if (!options.destroyBy) {
@@ -208,13 +213,11 @@ module.exports = function (Bookshelf) {
             }
 
             // Fetch the object before destroying it, so that the changed data is available to events
-            const obj = await this.forge(options.destroyBy).fetch(options);
-            return obj.destroy(options);
-        },
-
-        // When loading an instance, subclasses can specify default to fetch
-        defaultColumnsToFetch: function defaultColumnsToFetch() {
-            return [];
+            return this.forge(options.destroyBy)
+                .fetch(options)
+                .then(function then(obj) {
+                    return obj.destroy(options);
+                });
         }
     });
 };
